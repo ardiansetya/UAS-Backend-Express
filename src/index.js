@@ -2,7 +2,7 @@ import express from "express";
 import { configDotenv } from "dotenv";
 configDotenv()
 
-const port = process.env.PORT
+const port = process.env.PORT || 2000
 const app = express()
 
 
