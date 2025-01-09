@@ -121,3 +121,12 @@ const updateCourse = async (req, res) => {
         res.status(500).json({ message: 'Terjadi kesalahan pada server' });
     }
 };
+
+
+module.exports = {
+    addCategory,
+    showCategories,
+    deleteCategory,
+    createCourse,
+    updateCourse
+}
