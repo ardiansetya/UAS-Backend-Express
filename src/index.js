@@ -10,7 +10,11 @@ app.get("/", (req, res) => {
     res.send("Hello World");
 });
 
-app.use('/api', require('./routes/authRoutes'));
+const authRoutes = require('./routes/authRoutes')
+const courseRoutes = require('./routes/courseRoutes')
+
+app.use('/api', authRoutes);
+app.use('/api', courseRoutes);
 
 app.listen(port, () => {
     console.log("Server is running on port " + port);

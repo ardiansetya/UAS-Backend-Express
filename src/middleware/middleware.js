@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const prisma = require('../prismaClient'); // Sesuaikan dengan path Prisma Client Anda
+const prisma = require('../db'); // Sesuaikan dengan path Prisma Client Anda
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your-jwt-secret';
 
@@ -33,4 +33,17 @@ const authenticate = async (req, res, next) => {
     }
 };
 
-module.exports = { authenticate };
+const isTeacher = (req, res, next) => {
+    // Memastikan bahwa user sudah terautentikasi
+    authenticate(req, res, () => {
+        // Memeriksa apakah role pengguna adalah 'teacher'
+        if (req.user.role !== 'teacher') {
+            return res.status(403).json({ error: 'Access denied. Only teachers are allowed to perform this action.' });
+        }
+        // Lanjutkan ke middleware berikutnya jika role user adalah teacher
+        next();
+    });
+};
+
+
+module.exports = { authenticate, isTeacher };

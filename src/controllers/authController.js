@@ -10,7 +10,7 @@ const JWT_SECRET = process.env.JWT_SECRET
 
 // Fungsi Register
 const register = async (req, res) => {
-    const { username, email, password, role = "student" } = req.body;
+    const { username, email, password, role = "STUDENT" } = req.body;
 
     if (!username || !email || !password) {
         return res.status(400).json({ message: 'Username, email, dan password wajib diisi' });
@@ -77,7 +77,7 @@ const login = async (req, res) => {
         // Membuat JWT token
         const token = jwt.sign(
             { userId: user.id, role: user.role }, // Payload yang berisi id user dan role
-            process.env.JWT_SECRET, // Gunakan secret key dari environment
+            JWT_SECRET, // Gunakan secret key dari environment
             { expiresIn: '1h' } // Token valid selama 1 jam
         );
 
