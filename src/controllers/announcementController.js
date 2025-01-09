@@ -1,12 +1,12 @@
-const { prisma } = require('../db'); // Pastikan Prisma sudah diinisialisasi dengan benar
+const prisma = require("../db");
 
 // Fungsi untuk menambahkan pengumuman
 const createAnnouncement = async (req, res) => {
     const { courseId } = req.params;
-    const { title, message, announceAt } = req.body;
+    const { title, message } = req.body;
 
     try {
-        const userId = req.user.userId; // Ambil userId dari JWT payload
+        const id = req.user.id; // Ambil id dari JWT payload
         const course = await prisma.course.findUnique({
             where: { id: parseInt(courseId) },
         });
@@ -16,7 +16,7 @@ const createAnnouncement = async (req, res) => {
         }
 
         // Pastikan hanya teacher yang bisa membuat pengumuman
-        if (course.teacherId !== userId) {
+        if (course.teacherId !== id) {
             return res.status(401).json({ message: 'Anda tidak diijinkan untuk membuat pengumuman' });
         }
 
@@ -24,8 +24,7 @@ const createAnnouncement = async (req, res) => {
             data: {
                 title,
                 message,
-                announceAt,
-                teacherId: userId,
+                teacherId: id,
                 courseId: course.id,
             },
         });
@@ -42,7 +41,7 @@ const showAnnouncements = async (req, res) => {
     const { courseId } = req.params;
 
     try {
-        const announcements = await prisma.CourseAnnouncement.findMany({
+        const announcements = await prisma.courseAnnouncement.findMany({
             where: { courseId: parseInt(courseId) },
             include: {
                 teacher: true, // Mengambil data teacher yang membuat pengumuman
@@ -66,7 +65,7 @@ const editAnnouncement = async (req, res) => {
     const { title, message, announceAt } = req.body;
 
     try {
-        const userId = req.user.userId; // Ambil userId dari JWT payload
+        const id = req.user.id; // Ambil id dari JWT payload
         const announcement = await prisma.courseAnnouncement.findUnique({
             where: { id: parseInt(announcementId) },
         });
@@ -76,7 +75,7 @@ const editAnnouncement = async (req, res) => {
         }
 
         // Pastikan hanya teacher yang bisa mengedit pengumuman
-        if (announcement.teacherId !== userId) {
+        if (announcement.teacherId !== id) {
             return res.status(401).json({ message: 'Anda tidak diijinkan untuk mengedit pengumuman ini' });
         }
 
@@ -101,7 +100,7 @@ const deleteAnnouncement = async (req, res) => {
     const { announcementId } = req.params;
 
     try {
-        const userId = req.user.userId; // Ambil userId dari JWT payload
+        const id = req.user.id; // Ambil id dari JWT payload
         const announcement = await prisma.courseAnnouncement.findUnique({
             where: { id: parseInt(announcementId) },
         });
@@ -111,7 +110,7 @@ const deleteAnnouncement = async (req, res) => {
         }
 
         // Pastikan hanya teacher yang bisa menghapus pengumuman
-        if (announcement.teacherId !== userId) {
+        if (announcement.teacherId !== id) {
             return res.status(401).json({ message: 'Anda tidak diijinkan untuk menghapus pengumuman ini' });
         }
 

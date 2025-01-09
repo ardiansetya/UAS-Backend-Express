@@ -168,7 +168,6 @@ model CourseAnnouncement {
   teacherId     Int
   title         String    @db.VarChar(100)
   message       String    @db.Text
-  announceAt    DateTime
 
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
