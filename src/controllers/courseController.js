@@ -33,18 +33,20 @@ const myCourses = async (req, res) => {
 };
 
 // Fungsi untuk membuat kursus
+
 const createCourse = async (req, res) => {
-    const { name, description, price, image } = req.body; // Mengambil data kursus dari body request
+    const { name, description, price, image, categoryId } = req.body;
 
     try {
-        const id = req.user.id; // Ambil id dari JWT payload
+        const id = req.user.id; // Ambil userId dari JWT payload
         const course = await prisma.course.create({
             data: {
                 name,
                 description,
                 price,
+                teacherId: id,
                 image,
-                teacherId: id,  // Menyimpan ID teacher (id)
+                categoryId: categoryId || null, // Menyimpan categoryId yang bisa null
             },
         });
         res.status(201).json(course);
@@ -54,20 +56,19 @@ const createCourse = async (req, res) => {
     }
 };
 
-// Fungsi untuk memperbarui kursus
 const updateCourse = async (req, res) => {
     const { courseId } = req.params;
-    const { name, description, price, image } = req.body; // Mengambil data dari body request
+    const { name, description, price, image, categoryId } = req.body;
 
     try {
-        const id = req.user.id; // Ambil id dari JWT payload
+        const userId = req.user.userId; // Ambil userId dari JWT payload
 
         // Cek apakah user adalah teacher dari course ini
         const course = await prisma.course.findUnique({
             where: { id: parseInt(courseId) },
         });
 
-        if (course.teacherId !== id) {
+        if (course.teacherId !== userId) {
             return res.status(401).json({ message: 'Anda tidak diijinkan untuk mengupdate kursus ini' });
         }
 
@@ -77,7 +78,8 @@ const updateCourse = async (req, res) => {
                 name,
                 description,
                 price,
-                image: image || course.image, // Update image jika ada, jika tidak gunakan image lama
+                image: image || course.image, // Update image jika ada
+                categoryId: categoryId || course.categoryId, // Menyimpan categoryId yang bisa null
             },
         });
         res.status(200).json(updatedCourse);
@@ -86,7 +88,6 @@ const updateCourse = async (req, res) => {
         res.status(500).json({ message: 'Terjadi kesalahan pada server' });
     }
 };
-
 // Fungsi untuk detail kursus
 const detailCourse = async (req, res) => {
     const { courseId } = req.params;

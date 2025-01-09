@@ -9,8 +9,6 @@ router.post('/categories', authenticate, isTeacher, categoryController.addCatego
 // Route untuk menampilkan semua kategori
 router.get('/categories', authenticate, categoryController.showCategories);
 
-// Route untuk mengupdate kategori
-router.put('/categories/:categoryId', authenticate, isTeacher, categoryController.updateCourse);
 
 // Route untuk menghapus kategori
 router.delete('/categories/:categoryId', authenticate, isTeacher, categoryController.deleteCategory);

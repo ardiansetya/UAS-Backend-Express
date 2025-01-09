@@ -67,66 +67,10 @@ const deleteCategory = async (req, res) => {
     }
 };
 
-const createCourse = async (req, res) => {
-    const { name, description, price, image, categoryId } = req.body;
-
-    try {
-        const userId = req.user.userId; // Ambil userId dari JWT payload
-        const course = await prisma.course.create({
-            data: {
-                name,
-                description,
-                price,
-                teacherId: userId,
-                image,
-                categoryId: categoryId || null, // Menyimpan categoryId yang bisa null
-            },
-        });
-        res.status(201).json(course);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Terjadi kesalahan pada server' });
-    }
-};
-
-const updateCourse = async (req, res) => {
-    const { courseId } = req.params;
-    const { name, description, price, image, categoryId } = req.body;
-
-    try {
-        const userId = req.user.userId; // Ambil userId dari JWT payload
-
-        // Cek apakah user adalah teacher dari course ini
-        const course = await prisma.course.findUnique({
-            where: { id: parseInt(courseId) },
-        });
-
-        if (course.teacherId !== userId) {
-            return res.status(401).json({ message: 'Anda tidak diijinkan untuk mengupdate kursus ini' });
-        }
-
-        const updatedCourse = await prisma.course.update({
-            where: { id: parseInt(courseId) },
-            data: {
-                name,
-                description,
-                price,
-                image: image || course.image, // Update image jika ada
-                categoryId: categoryId || course.categoryId, // Menyimpan categoryId yang bisa null
-            },
-        });
-        res.status(200).json(updatedCourse);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Terjadi kesalahan pada server' });
-    }
-};
 
 
 module.exports = {
     addCategory,
     showCategories,
     deleteCategory,
-    createCourse,
-    updateCourse
 }
