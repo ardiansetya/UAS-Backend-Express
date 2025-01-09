@@ -37,7 +37,7 @@ const isTeacher = (req, res, next) => {
     // Memastikan bahwa user sudah terautentikasi
     authenticate(req, res, () => {
         // Memeriksa apakah role pengguna adalah 'teacher'
-        if (req.user.role !== 'teacher') {
+        if (req.user.role !== 'TEACHER') {
             return res.status(403).json({ error: 'Access denied. Only teachers are allowed to perform this action.' });
         }
         // Lanjutkan ke middleware berikutnya jika role user adalah teacher

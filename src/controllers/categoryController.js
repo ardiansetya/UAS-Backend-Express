@@ -6,7 +6,7 @@ const addCategory = async (req, res) => {
 
     try {
         // Mengecek apakah kategori sudah ada
-        const existingCategory = await prisma.courseCategory.findUnique({
+        const existingCategory = await prisma.courseCategory.findFirst({
             where: { name },
         });
 
