@@ -1,0 +1,92 @@
+datasource db {
+  provider = "postgresql" // atau provider lain yang Anda gunakan
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id       Int      @id @default(autoincrement())
+  username String   @unique @db.VarChar(50) // Batas panjang username
+  email    String   @unique @db.VarChar(100)
+  password String   @db.VarChar(255) // Menyesuaikan untuk hash password
+
+  courses  Course[] @relation("UserCourses") // Relasi ke Course sebagai teacher
+  members  CourseMember[] // Relasi ke CourseMember
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+model Course {
+  id          Int      @id @default(autoincrement())
+  name        String   @db.VarChar(255)
+  description String   @db.Text
+  price       Int
+  image       String?  @db.VarChar(255) // URL gambar
+  teacher     User     @relation("UserCourses", fields: [teacherId], references: [id])
+  teacherId   Int
+  members     CourseMember[]
+  contents    CourseContent[]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("courses")
+  @@index([teacherId]) // Indeks pada teacherId untuk optimasi query
+}
+
+model CourseMember {
+  id        Int    @id @default(autoincrement())
+  course    Course @relation(fields: [courseId], references: [id])
+  courseId  Int
+  user      User   @relation(fields: [userId], references: [id])
+  userId    Int
+  roles     String @db.VarChar(10) 
+  comments  Comment[]
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("course_members")
+  @@index([courseId, userId], name: "course_user_idx") // Indeks gabungan untuk relasi unik
+}
+model CourseContent {
+  id             Int              @id @default(autoincrement())
+  name           String           @db.VarChar(200)
+  description    String           @db.Text
+  videoUrl       String?          @db.VarChar(200)
+  fileAttachment String?          @db.VarChar(255) // URL file
+  course         Course           @relation(fields: [courseId], references: [id])
+  courseId       Int
+  parentContent  CourseContent?   @relation("ContentParent", fields: [parentId], references: [id])
+  parentId       Int?             // Kolom ini menyimpan ID dari konten induk
+  childContents  CourseContent[]  @relation("ContentParent") // Konten anak
+  comments       Comment[]        // Tambahkan relasi ke model Comment
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@map("course_contents")
+  @@index([courseId]) // Indeks pada courseId untuk optimasi
+}
+
+model Comment {
+  id        Int          @id @default(autoincrement())
+  content   CourseContent @relation(fields: [contentId], references: [id])
+  contentId Int
+  member    CourseMember  @relation(fields: [memberId], references: [id])
+  memberId  Int
+  comment   String        @db.Text
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("comments")
+  @@index([contentId]) // Indeks pada contentId
+  @@index([memberId])  // Indeks pada memberId
+}
