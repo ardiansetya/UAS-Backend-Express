@@ -1,159 +1,177 @@
+// Menyebutkan datasource untuk PostgreSQL
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
+// Generator untuk Prisma Client
 generator client {
   provider = "prisma-client-js"
 }
 
+// Enum untuk role pengguna
+enum UserRole {
+  STUDENT
+  TEACHER
+}
+
+// Model User untuk mendefinisikan pengguna di sistem
 model User {
-  id        Int           @id @default(autoincrement())
-  username  String        @unique @db.VarChar(50)
-  email     String        @unique @db.VarChar(100)
-  password  String        @db.VarChar(255)
-  firstName String?       @db.VarChar(50)
-  lastName  String?       @db.VarChar(50)
-  phone     String?       @db.VarChar(20)
-  description String?     @db.Text
-  profileImage String?    @db.VarChar(255)
+  id            Int          @id @default(autoincrement())
+  username      String       @unique @db.VarChar(50)
+  email         String       @unique @db.VarChar(100)
+  password      String       @db.VarChar(255)
+  firstName     String?      @db.VarChar(50)
+  lastName      String?      @db.VarChar(50)
+  phone         String?      @db.VarChar(20)
+  description   String?      @db.Text
+  profileImage  String?      @db.VarChar(255)
+  role          UserRole     @default(STUDENT) // Menentukan peran default sebagai STUDENT
 
-  courses   Course[]      @relation("UserCourses")
-  members   CourseMember[]
-  feedbacks CourseFeedback[]
-  coursesAnnouncements   CourseAnnouncement[]
+  courses       Course[]     @relation("UserCourses")
+  members       CourseMember[]
+  feedbacks     CourseFeedback[]
+  coursesAnnouncements CourseAnnouncement[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
 
   @@map("users")
 }
 
+// Model Course untuk mendefinisikan kursus yang tersedia
 model Course {
-  id          Int                @id @default(autoincrement())
-  name        String             @db.VarChar(255)
-  description String             @db.Text
-  price       Int
-  image       String?            @db.VarChar(255)
-  teacher     User               @relation("UserCourses", fields: [teacherId], references: [id])
-  teacherId   Int
-  members     CourseMember[]
-  contents    CourseContent[]
-  feedbacks   CourseFeedback[]
-  announcements CourseAnnouncement[]
+  id             Int               @id @default(autoincrement())
+  name           String            @db.VarChar(255)
+  description    String            @db.Text
+  price          Int
+  image          String?           @db.VarChar(255)
+  teacher        User              @relation("UserCourses", fields: [teacherId], references: [id])
+  teacherId      Int
+  members        CourseMember[]
+  contents       CourseContent[]
+  feedbacks      CourseFeedback[]
+  announcements  CourseAnnouncement[]
 
-  categoryId  Int?               // Kolom kategori yang boleh null
-  category    CourseCategory?    @relation(fields: [categoryId], references: [id])
+  categoryId     Int?              // Kolom kategori yang bisa null
+  category       CourseCategory?   @relation(fields: [categoryId], references: [id])
 
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
 
   @@map("courses")
   @@index([teacherId])
 }
 
+// Model CourseMember untuk mendefinisikan anggota dalam kursus
 model CourseMember {
-  id        Int          @id @default(autoincrement())
-  course    Course       @relation(fields: [courseId], references: [id])
-  courseId  Int
-  user      User         @relation(fields: [userId], references: [id])
-  userId    Int
-  roles     String       @db.VarChar(10)
-  comments  Comment[]
-  completions CompletionTracking[]
+  id            Int        @id @default(autoincrement())
+  course        Course     @relation(fields: [courseId], references: [id])
+  courseId      Int
+  user          User       @relation(fields: [userId], references: [id])
+  userId        Int
+  roles         String     @db.VarChar(10) // Misal, 'student', 'assistant'
+  comments      Comment[]
+  completions   CompletionTracking[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
 
   @@map("course_members")
   @@index([courseId, userId], name: "course_user_idx")
 }
 
+// Model CourseContent untuk mendefinisikan konten dari kursus
 model CourseContent {
-  id             Int              @id @default(autoincrement())
-  name           String           @db.VarChar(200)
-  description    String           @db.Text
-  videoUrl       String?          @db.VarChar(200)
-  fileAttachment String?          @db.VarChar(255)
-  course         Course           @relation(fields: [courseId], references: [id])
-  courseId       Int
-  parentContent  CourseContent?   @relation("ContentParent", fields: [parentId], references: [id])
-  parentId       Int?
-  childContents  CourseContent[]  @relation("ContentParent")
-  comments       Comment[]
-  completions    CompletionTracking[]
+  id               Int               @id @default(autoincrement())
+  name             String            @db.VarChar(200)
+  description      String            @db.Text
+  videoUrl         String?           @db.VarChar(200)
+  fileAttachment   String?           @db.VarChar(255)
+  course           Course            @relation(fields: [courseId], references: [id])
+  courseId         Int
+  parentContent    CourseContent?    @relation("ContentParent", fields: [parentId], references: [id])
+  parentId         Int?
+  childContents    CourseContent[]   @relation("ContentParent")
+  comments         Comment[]
+  completions      CompletionTracking[]
 
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
 
   @@map("course_contents")
   @@index([courseId])
 }
 
+// Model Comment untuk mendefinisikan komentar pada konten kursus
 model Comment {
-  id        Int          @id @default(autoincrement())
-  content   CourseContent @relation(fields: [contentId], references: [id])
-  contentId Int
-  member    CourseMember  @relation(fields: [memberId], references: [id])
-  memberId  Int
-  comment   String        @db.Text
+  id          Int          @id @default(autoincrement())
+  content     CourseContent @relation(fields: [contentId], references: [id])
+  contentId   Int
+  member      CourseMember  @relation(fields: [memberId], references: [id])
+  memberId    Int
+  comment     String        @db.Text
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
 
   @@map("comments")
   @@index([contentId])
   @@index([memberId])
 }
 
+// Model CompletionTracking untuk melacak penyelesaian konten oleh anggota
 model CompletionTracking {
-  id        Int          @id @default(autoincrement())
-  member    CourseMember @relation(fields: [memberId], references: [id])
-  memberId  Int
-  content   CourseContent @relation(fields: [contentId], references: [id])
-  contentId Int
+  id          Int          @id @default(autoincrement())
+  member      CourseMember @relation(fields: [memberId], references: [id])
+  memberId    Int
+  content     CourseContent @relation(fields: [contentId], references: [id])
+  contentId   Int
 
-  createdAt DateTime @default(now())
+  createdAt   DateTime     @default(now())
 
   @@map("completion_tracking")
 }
 
+// Model CourseFeedback untuk mendefinisikan umpan balik pada kursus
 model CourseFeedback {
-  id        Int     @id @default(autoincrement())
-  course    Course  @relation(fields: [courseId], references: [id])
-  courseId  Int
-  user      User    @relation(fields: [userId], references: [id])
-  userId    Int
-  feedback  String  @db.Text
+  id          Int     @id @default(autoincrement())
+  course      Course  @relation(fields: [courseId], references: [id])
+  courseId    Int
+  user        User    @relation(fields: [userId], references: [id])
+  userId      Int
+  feedback    String  @db.Text
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
 
   @@map("course_feedbacks")
 }
 
+// Model CourseCategory untuk mendefinisikan kategori kursus
 model CourseCategory {
-  id        Int        @id @default(autoincrement())
-  name      String     @db.VarChar(100)
-  courses   Course[]
+  id          Int        @id @default(autoincrement())
+  name        String     @db.VarChar(100)
+  courses     Course[]
 
-  createdAt DateTime @default(now())
+  createdAt   DateTime   @default(now())
 
   @@map("course_categories")
 }
 
+// Model CourseAnnouncement untuk mendefinisikan pengumuman pada kursus
 model CourseAnnouncement {
-  id        Int     @id @default(autoincrement())
-  course    Course  @relation(fields: [courseId], references: [id])
-  courseId  Int
-  teacher   User    @relation(fields: [teacherId], references: [id])
-  teacherId Int
-  title     String  @db.VarChar(100)
-  message   String  @db.Text
-  announceAt DateTime
+  id            Int       @id @default(autoincrement())
+  course        Course    @relation(fields: [courseId], references: [id])
+  courseId      Int
+  teacher       User      @relation(fields: [teacherId], references: [id])
+  teacherId     Int
+  title         String    @db.VarChar(100)
+  message       String    @db.Text
+  announceAt    DateTime
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 
   @@map("course_announcements")
 }
