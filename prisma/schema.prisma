@@ -44,8 +44,9 @@ model Course {
   id             Int               @id @default(autoincrement())
   name           String            @db.VarChar(255)
   description    String            @db.Text
+  url            String            
   price          Int
-  image          String?           @db.VarChar(255)
+  site           String?            @db.VarChar(255)
   teacher        User              @relation("UserCourses", fields: [teacherId], references: [id])
   teacherId      Int
   members        CourseMember[]

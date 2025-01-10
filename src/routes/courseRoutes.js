@@ -21,6 +21,9 @@ router.put('/courses/:courseId', authenticate, courseController.updateCourse);
 // Route untuk mendaftar kursus
 router.post('/courses/:courseId/enroll', authenticate, courseController.enrollCourse);
 
+// Route untuk menampilkan komentar pada konten kursus
+router.get('/contents/:contentId/comments', authenticate, courseController.getContentComment);
+
 // Route untuk membuat komentar pada konten kursus
 router.post('/contents/:contentId/comments', authenticate, courseController.createContentComment);
 
