@@ -88,12 +88,8 @@ model CourseContent {
   name             String            @db.VarChar(200)
   description      String            @db.Text
   videoUrl         String?           @db.VarChar(200)
-  fileAttachment   String?           @db.VarChar(255)
   course           Course            @relation(fields: [courseId], references: [id])
   courseId         Int
-  parentContent    CourseContent?    @relation("ContentParent", fields: [parentId], references: [id])
-  parentId         Int?
-  childContents    CourseContent[]   @relation("ContentParent")
   comments         Comment[]
   completions      CompletionTracking[]
 

@@ -14,11 +14,13 @@ const authRoutes = require('./routes/authRoutes')
 const courseRoutes = require('./routes/courseRoutes')
 const  categoryRoutes = require('./routes/categoryRoutes')
 const announcementRoutes = require('./routes/announcementRoutes');
+const courseContentRoutes = require('./routes/courseContentRoutes');
 
 
 
 app.use('/api', authRoutes);
 app.use('/api', courseRoutes);
+app.use('/api', courseContentRoutes);
 app.use('/api', categoryRoutes);
 app.use('/api', announcementRoutes);
 

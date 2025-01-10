@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 
 async function importCSV() {
     const data = [];
-    fs.createReadStream("course-data.csv")
+    fs.createReadStream("member-data.csv")
         .pipe(csvParser())
         .on("data", (row) => {
             data.push(row);
@@ -17,14 +17,11 @@ async function importCSV() {
             // Lakukan import data ke database
             try {
                 for (const record of data) {
-                    await prisma.course.create({
+                    await prisma.courseMember.create({
                         data: {
-                            name: record.name,
-                            url: record.url,
-                            description: record.description,
-                            site: record.site,
-                            price: parseInt(record.price),
-                            teacherId: parseInt(record.teacher),
+                            courseId: parseInt(record.course_id),
+                           userId: parseInt(record.user_id),
+                           roles: record.roles
                         },
                     });
                 }
