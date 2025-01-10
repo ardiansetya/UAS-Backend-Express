@@ -20,7 +20,7 @@ const myCourses = async (req, res) => {
     try {
         const id = req.user.id; // Ambil id dari JWT payload
         const courses = await prisma.courseMember.findMany({
-            where: { id },
+            where: { userId:id },
             include: {
                 course: true,  // Mengambil data course terkait
             },

@@ -105,8 +105,8 @@ model Comment {
   id          Int          @id @default(autoincrement())
   content     CourseContent @relation(fields: [contentId], references: [id])
   contentId   Int
-  member      CourseMember  @relation(fields: [memberId], references: [id])
-  memberId    Int
+  user      CourseMember  @relation(fields: [userId], references: [id])
+  userId    Int
   comment     String        @db.Text
 
   createdAt   DateTime      @default(now())
@@ -114,7 +114,7 @@ model Comment {
 
   @@map("comments")
   @@index([contentId])
-  @@index([memberId])
+  @@index([userId])
 }
 
 // Model CompletionTracking untuk melacak penyelesaian konten oleh anggota
