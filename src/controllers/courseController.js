@@ -121,11 +121,21 @@ const enrollCourse = async (req, res) => {
             return res.status(404).json({ message: 'Kursus tidak ditemukan' });
         }
 
+        const existingEnrollment = await prisma.courseMember.findFirst({
+            where: {
+                courseId: parseInt(courseId),
+                userId: id,
+            },
+        });
+
+        if (existingEnrollment) {
+            return res.status(400).json({ message: 'Anda sudah terdaftar di kursus ini' });
+        }
+
         // Mendaftarkan user ke kursus
         const courseMember = await prisma.courseMember.create({
             data: {
-                id,
-                courseId: course.id,
+                courseId: parseInt(courseId),
                 userId: id,
                 roles: 'STUDENT',  // Menetapkan role sebagai student
             },
