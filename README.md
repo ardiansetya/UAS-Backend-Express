@@ -3,6 +3,7 @@ Berikut adalah README yang diperbarui dengan penambahan endpoint untuk menghapus
 # README - Sistem Manajemen Kursus
 
 ## Daftar Isi
+
 - [Pendahuluan](#pendahuluan)
 - [Fitur](#fitur)
 - [Teknologi yang Digunakan](#teknologi-yang-digunakan)
@@ -19,11 +20,13 @@ Berikut adalah README yang diperbarui dengan penambahan endpoint untuk menghapus
 ---
 
 ## Pendahuluan
+
 Sistem manajemen kursus yang dibangun dengan Express.js, PostgreSQL, dan Prisma, menyediakan fungsionalitas bagi guru dan siswa untuk mengelola kursus, pengumuman, umpan balik, dan pelacakan konten. Sistem ini memanfaatkan Docker Compose untuk pengaturan dan penyebaran yang lebih mudah.
 
 ---
 
 ## Fitur
+
 - Autentikasi pengguna (registrasi dan login).
 - Pembuatan, pengeditan, dan pendaftaran kursus.
 - [Fitur +4] Course Announcements.
@@ -35,6 +38,7 @@ Sistem manajemen kursus yang dibangun dengan Express.js, PostgreSQL, dan Prisma,
 ---
 
 ## Teknologi yang Digunakan
+
 - **Backend**: Express.js
 - **Database**: PostgreSQL
 - **ORM**: Prisma
@@ -43,6 +47,7 @@ Sistem manajemen kursus yang dibangun dengan Express.js, PostgreSQL, dan Prisma,
 ---
 
 ## Instruksi Pengaturan
+
 1. Clone repositori:
    ```bash
    git clone <repository-url>
@@ -65,6 +70,7 @@ Sistem manajemen kursus yang dibangun dengan Express.js, PostgreSQL, dan Prisma,
 ### Autentikasi
 
 #### Registrasi
+
 - **Endpoint**: `POST /register`
 - **Request Body**:
   ```json
@@ -89,6 +95,7 @@ Sistem manajemen kursus yang dibangun dengan Express.js, PostgreSQL, dan Prisma,
   ```
 
 #### Login
+
 - **Endpoint**: `POST /login`
 - **Request Body**:
   ```json
@@ -116,6 +123,7 @@ Sistem manajemen kursus yang dibangun dengan Express.js, PostgreSQL, dan Prisma,
 ### Manajemen Kursus
 
 #### Daftar Kursus
+
 - **Endpoint**: `GET /courses`
 - **Response Body**:
   ```json
@@ -139,6 +147,7 @@ Sistem manajemen kursus yang dibangun dengan Express.js, PostgreSQL, dan Prisma,
   ```
 
 #### Detail Kursus
+
 - **Endpoint**: `GET /courses/:courseId`
 - **Response Body**:
   ```json
@@ -160,6 +169,7 @@ Sistem manajemen kursus yang dibangun dengan Express.js, PostgreSQL, dan Prisma,
   ```
 
 #### Kursus Saya
+
 - **Endpoint**: `GET /mycourses`
 - **Response Body**:
   ```json
@@ -175,6 +185,7 @@ Sistem manajemen kursus yang dibangun dengan Express.js, PostgreSQL, dan Prisma,
   ```
 
 #### Buat Kursus
+
 - **Endpoint**: `POST /courses`
 - **Request Body**:
   ```json
@@ -203,6 +214,7 @@ Sistem manajemen kursus yang dibangun dengan Express.js, PostgreSQL, dan Prisma,
   ```
 
 #### Perbarui Kursus
+
 - **Endpoint**: `PUT /courses/:courseId`
 - **Request Body**:
   ```json
@@ -231,6 +243,7 @@ Sistem manajemen kursus yang dibangun dengan Express.js, PostgreSQL, dan Prisma,
   ```
 
 #### Daftar di Kursus
+
 - **Endpoint**: `POST /courses/:courseId/enroll`
 - **Response Body**:
   ```json
@@ -247,9 +260,10 @@ Sistem manajemen kursus yang dibangun dengan Express.js, PostgreSQL, dan Prisma,
 
 ---
 
-### [Fitur +4] Course Announcements
+### Course Announcements
 
 #### Buat Pengumuman
+
 - **Endpoint**: `POST /course/:courseId/announcement`
 - **Request Body**:
   ```json
@@ -273,6 +287,7 @@ Sistem manajemen kursus yang dibangun dengan Express.js, PostgreSQL, dan Prisma,
   ```
 
 #### Tampilkan Pengumuman
+
 - **Endpoint**: `GET /course/:courseId/announcements`
 - **Response Body**:
   ```json
@@ -292,6 +307,7 @@ Sistem manajemen kursus yang dibangun dengan Express.js, PostgreSQL, dan Prisma,
   ```
 
 #### Edit Pengumuman
+
 - **Endpoint**: `PUT /course/:courseId/announcement/:announcementId`
 - **Request Body**:
   ```json
@@ -315,6 +331,7 @@ Sistem manajemen kursus yang dibangun dengan Express.js, PostgreSQL, dan Prisma,
   ```
 
 #### Hapus Pengumuman
+
 - **Endpoint**: `DELETE /course/:courseId/announcement/:announcementId`
 - **Response Body**:
   ```json
@@ -328,6 +345,7 @@ Sistem manajemen kursus yang dibangun dengan Express.js, PostgreSQL, dan Prisma,
 ### [Fitur +3] Content Completion Tracking
 
 #### Tambah Pelacakan Penyelesaian
+
 - **Endpoint**: `POST /completion`
 - **Request Body**:
   ```json
@@ -349,6 +367,7 @@ Sistem manajemen kursus yang dibangun dengan Express.js, PostgreSQL, dan Prisma,
   ```
 
 #### Tampilkan Pelacakan Penyelesaian
+
 - **Endpoint**: `GET /completion/:courseId`
 - **Response Body**:
   ```json
@@ -363,6 +382,7 @@ Sistem manajemen kursus yang dibangun dengan Express.js, PostgreSQL, dan Prisma,
   ```
 
 #### Hapus Pelacakan Penyelesaian
+
 - **Endpoint**: `DELETE /completion/:completionId`
 - **Response Body**:
   ```json
@@ -373,9 +393,10 @@ Sistem manajemen kursus yang dibangun dengan Express.js, PostgreSQL, dan Prisma,
 
 ---
 
-### [Fitur +4] Course Feedback
+### Course Feedback
 
 #### Tambah Umpan Balik
+
 - **Endpoint**: `POST /course/:courseId/feedback`
 - **Request Body**:
   ```json
@@ -397,6 +418,7 @@ Sistem manajemen kursus yang dibangun dengan Express.js, PostgreSQL, dan Prisma,
   ```
 
 #### Tampilkan Umpan Balik
+
 - **Endpoint**: `GET /course/:courseId/feedback`
 - **Response Body**:
   ```json
@@ -412,6 +434,7 @@ Sistem manajemen kursus yang dibangun dengan Express.js, PostgreSQL, dan Prisma,
   ```
 
 #### Edit Umpan Balik
+
 - **Endpoint**: `PUT /course/:courseId/feedback/:feedbackId`
 - **Request Body**:
   ```json
@@ -433,6 +456,7 @@ Sistem manajemen kursus yang dibangun dengan Express.js, PostgreSQL, dan Prisma,
   ```
 
 #### Hapus Umpan Balik
+
 - **Endpoint**: `DELETE /course/:courseId/feedback/:feedbackId`
 - **Response Body**:
   ```json
@@ -443,9 +467,10 @@ Sistem manajemen kursus yang dibangun dengan Express.js, PostgreSQL, dan Prisma,
 
 ---
 
-### [Fitur +4] Course Categories Management
+### Course Categories Management
 
 #### Tambah Kategori
+
 - **Endpoint**: `POST /categories`
 - **Request Body**:
   ```json
@@ -465,6 +490,7 @@ Sistem manajemen kursus yang dibangun dengan Express.js, PostgreSQL, dan Prisma,
   ```
 
 #### Tampilkan Kategori
+
 - **Endpoint**: `GET /categories`
 - **Response Body**:
   ```json
@@ -477,6 +503,7 @@ Sistem manajemen kursus yang dibangun dengan Express.js, PostgreSQL, dan Prisma,
   ```
 
 #### Hapus Kategori
+
 - **Endpoint**: `DELETE /categories/:categoryId`
 - **Response Body**:
   ```json
@@ -490,6 +517,7 @@ Sistem manajemen kursus yang dibangun dengan Express.js, PostgreSQL, dan Prisma,
 ### Manajemen Komentar
 
 #### Tampilkan Komentar Konten
+
 - **Endpoint**: `GET /contents/:contentId/comments`
 - **Response Body**:
   ```json
@@ -505,6 +533,7 @@ Sistem manajemen kursus yang dibangun dengan Express.js, PostgreSQL, dan Prisma,
   ```
 
 #### Buat Komentar Konten
+
 - **Endpoint**: `POST /contents/:contentId/comments`
 - **Request Body**:
   ```json
@@ -526,6 +555,7 @@ Sistem manajemen kursus yang dibangun dengan Express.js, PostgreSQL, dan Prisma,
   ```
 
 #### Hapus Komentar
+
 - **Endpoint**: `DELETE /contents/comments/:commentId`
 - **Response Body**:
   ```json
