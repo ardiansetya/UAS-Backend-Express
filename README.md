@@ -26,10 +26,10 @@ Sistem manajemen kursus yang dibangun dengan Express.js, PostgreSQL, dan Prisma,
 ## Fitur
 - Autentikasi pengguna (registrasi dan login).
 - Pembuatan, pengeditan, dan pendaftaran kursus.
-- Pengumuman untuk kursus.
-- Pelacakan penyelesaian konten oleh siswa.
-- Sistem umpan balik untuk kursus.
-- Manajemen kategori untuk kursus.
+- [Fitur +4] Course Announcements.
+- [Fitur +3] Content Completion Tracking.
+- [Fitur +4] Course Feedback.
+- [Fitur +4] Course Categories Management.
 - Komentar pada konten kursus.
 
 ---
@@ -247,7 +247,7 @@ Sistem manajemen kursus yang dibangun dengan Express.js, PostgreSQL, dan Prisma,
 
 ---
 
-### Pengumuman
+### [Fitur +4] Course Announcements
 
 #### Buat Pengumuman
 - **Endpoint**: `POST /course/:courseId/announcement`
@@ -325,7 +325,7 @@ Sistem manajemen kursus yang dibangun dengan Express.js, PostgreSQL, dan Prisma,
 
 ---
 
-### Pelacakan Penyelesaian Konten
+### [Fitur +3] Content Completion Tracking
 
 #### Tambah Pelacakan Penyelesaian
 - **Endpoint**: `POST /completion`
@@ -373,7 +373,7 @@ Sistem manajemen kursus yang dibangun dengan Express.js, PostgreSQL, dan Prisma,
 
 ---
 
-### Umpan Balik Kursus
+### [Fitur +4] Course Feedback
 
 #### Tambah Umpan Balik
 - **Endpoint**: `POST /course/:courseId/feedback`
@@ -443,7 +443,7 @@ Sistem manajemen kursus yang dibangun dengan Express.js, PostgreSQL, dan Prisma,
 
 ---
 
-### Manajemen Kategori Kursus
+### [Fitur +4] Course Categories Management
 
 #### Tambah Kategori
 - **Endpoint**: `POST /categories`
@@ -535,5 +535,3 @@ Sistem manajemen kursus yang dibangun dengan Express.js, PostgreSQL, dan Prisma,
   ```
 
 ---
-
-README ini sekarang mencakup semua endpoint yang relevan, termasuk pengelolaan komentar, dan ditulis dalam bahasa Indonesia untuk memudahkan pemahaman.
