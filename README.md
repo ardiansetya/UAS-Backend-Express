@@ -1,7 +1,3 @@
-Berikut adalah README yang diperbarui dengan penambahan endpoint untuk menghapus komentar dan ditulis dalam bahasa Indonesia:
-
-# README - Sistem Manajemen Kursus
-
 ## Daftar Isi
 
 - [Pendahuluan](#pendahuluan)
