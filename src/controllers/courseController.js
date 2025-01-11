@@ -3,22 +3,47 @@ const prisma = require('../db');  // Pastikan Prisma sudah diinisialisasi dengan
 // Fungsi untuk menampilkan daftar kursus
 const listCourses = async (req, res) => {
     try {
+        
+        const { page = 1, limit = 10 } = req.query; // Ambil nilai page dan limit dari query string (default page = 1, limit = 10)
+        const pageNumber = parseInt(page, 10);
+        const limitNumber = parseInt(limit, 10);
+
+        if (isNaN(pageNumber) || isNaN(limitNumber) || pageNumber < 1 || limitNumber < 1) {
+            return res.status(400).json({ message: 'Parameter page dan limit harus berupa angka positif' });
+        }
+
+        const skip = (pageNumber - 1) * limitNumber; // Hitung jumlah data yang dilewati
+
+        // Ambil data courses dengan pagination
         const courses = await prisma.course.findMany({
+            skip,
+            take: limitNumber,
             include: {
-                teacher: true,  // Mengambil data teacher terkait
+                teacher: true, // Mengambil data teacher terkait
             },
         });
-        res.status(200).json(courses);
+
+        // Hitung total courses
+        const totalCourses = await prisma.course.count();
+
+        res.status(200).json({
+            data: courses,
+            totalCourses,
+            totalPages: Math.ceil(totalCourses / limitNumber),
+            currentPage: pageNumber,
+        });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Terjadi kesalahan pada server' });
     }
 };
 
+
 // Fungsi untuk mengambil kursus milik user
 const myCourses = async (req, res) => {
     try {
         const id = req.user.id; // Ambil id dari JWT payload
+        console.log(req.user)
         const courses = await prisma.courseMember.findMany({
             where: { userId:id },
             include: {
@@ -35,15 +60,24 @@ const myCourses = async (req, res) => {
 // Fungsi untuk membuat kursus
 
 const createCourse = async (req, res) => {
-    const { name, description, price, site, categoryId } = req.body;
+    const { name, description, price, site, categoryId, url } = req.body;
 
     try {
-        const id = req.user.id; // Ambil id dari JWT payload
+        const {id, role} = req.user; // Ambil id dari JWT payload
+        console.log(req.user.roles)
+
+        // Validasi role
+        if (role !== 'teacher') {
+            return res.status(403).json({ message: 'Anda tidak memiliki izin untuk membuat course' });
+        }
+
+
         const course = await prisma.course.create({
             data: {
                 name,
                 description,
                 price,
+                url,
                 teacherId: id,
                 site,
                 categoryId: categoryId || null, // Menyimpan categoryId yang bisa null

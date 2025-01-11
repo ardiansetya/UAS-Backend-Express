@@ -1,0 +1,30 @@
+
+### Pengumuman  
+  
+# Buat Pengumuman  
+POST http://localhost:<port>/course/1/announcement  
+Authorization: Bearer <token>  
+Content-Type: application/json  
+  
+{  
+    "title": "Pengumuman Penting",  
+    "message": "Ini adalah pengumuman penting untuk kursus."  
+}  
+  
+# Tampilkan Pengumuman  
+GET http://localhost:<port>/course/1/announcements  
+  
+# Edit Pengumuman  
+PUT http://localhost:<port>/course/1/announcement/1  
+Authorization: Bearer <token>  
+Content-Type: application/json  
+  
+{  
+    "title": "Pengumuman Diperbarui",  
+    "message": "Ini adalah pengumuman yang diperbarui."  
+}  
+  
+# Hapus Pengumuman  
+DELETE http://localhost:<port>/course/1/announcement/1  
+Authorization: Bearer <token>  
+  

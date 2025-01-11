@@ -1,0 +1,18 @@
+### Manajemen Kategori Kursus  
+  
+# Tambah Kategori  
+POST http://localhost:<port>/categories  
+Authorization: Bearer <token>  
+Content-Type: application/json  
+  
+{  
+    "name": "Kategori Baru"  
+}  
+  
+# Tampilkan Kategori  
+GET http://localhost:<port>/categories  
+  
+# Hapus Kategori  
+DELETE http://localhost:<port>/categories/1  
+Authorization: Bearer <token>  
+ 
