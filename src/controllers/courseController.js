@@ -199,6 +199,39 @@ const createContentComment = async (req, res) => {
     }
 };
 
+const deleteComment = async (req, res) => {
+    const { commentId } = req.params;
+
+    try {
+        const userId = req.user.id; // Ambil ID user dari JWT payload
+
+        // Cari komentar berdasarkan ID
+        const comment = await prisma.comment.findUnique({
+            where: { id: parseInt(commentId) },
+        });
+
+        if (!comment) {
+            return res.status(404).json({ message: 'Komentar tidak ditemukan' });
+        }
+
+        // Pastikan hanya pemilik komentar yang bisa menghapusnya
+        if (comment.memberId !== userId) {
+            return res.status(403).json({ message: 'Anda tidak memiliki izin untuk menghapus komentar ini' });
+        }
+
+        // Hapus komentar
+        await prisma.comment.delete({
+            where: { id: parseInt(commentId) },
+        });
+
+        res.status(200).json({ message: 'Komentar berhasil dihapus' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Terjadi kesalahan pada server' });
+    }
+};
+
+
 module.exports = {
     listCourses,
     myCourses,
@@ -207,5 +240,6 @@ module.exports = {
     detailCourse,
     enrollCourse,
     createContentComment,
-    getContentComment
+    getContentComment,
+    deleteComment
 };

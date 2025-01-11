@@ -27,4 +27,7 @@ router.get('/contents/:contentId/comments', authenticate, courseController.getCo
 // Route untuk membuat komentar pada konten kursus
 router.post('/contents/:contentId/comments', authenticate, courseController.createContentComment);
 
+// Route untuk menghapus komentar
+router.delete('/contents/comments/:commentId', authenticate, courseController.deleteComment);
+
 module.exports = router;
