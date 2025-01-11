@@ -10,10 +10,10 @@ Berikut adalah README yang diperbarui dengan penambahan endpoint untuk menghapus
 - [Endpoint](#endpoint)
   - [Autentikasi](#autentikasi)
   - [Manajemen Kursus](#manajemen-kursus)
-  - [Pengumuman](#pengumuman)
-  - [Pelacakan Penyelesaian Konten](#pelacakan-penyelesaian-konten)
-  - [Umpan Balik Kursus](#umpan-balik-kursus)
-  - [Manajemen Kategori Kursus](#manajemen-kategori-kursus)
+  - [Pengumuman](#course-announcements)
+  - [Pelacakan Penyelesaian Konten](#content-completion-tracking)
+  - [Umpan Balik Kursus](#course-feedback)
+  - [Manajemen Kategori Kursus](#course-categories-management)
   - [Manajemen Komentar](#manajemen-komentar)
 
 ---
