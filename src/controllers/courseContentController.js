@@ -104,8 +104,14 @@ const getCourseContentById = async (req, res) => {
 const updateCourseContent = async (req, res) => {
     const { id } = req.params;
     const { name, description, videoUrl } = req.body;
+    const {role} = req.user
 
     try {
+
+        if (role !== "TEACHER") {
+            return res.status(403).json({ error: "Tidak memiliki izin untuk membuat konten" });
+        }
+        
         // Validasi jika konten ada
         const courseContent = await prisma.courseContent.findUnique({
             where: { id: parseInt(id) },

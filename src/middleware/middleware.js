@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const prisma = require('../db'); // Sesuaikan dengan path Prisma Client Anda
+const prisma = require('../db'); 
 const dotenv = require('dotenv');
 
 dotenv.config();
@@ -41,7 +41,7 @@ const isTeacher = (req, res, next) => {
     authenticate(req, res, () => {
         // Memeriksa apakah role pengguna adalah 'teacher'
         if (req.user.role !== 'TEACHER') {
-            return res.status(403).json({ error: 'Access denied. Only teachers are allowed to perform this action.' });
+            return res.status(403).json({ error: 'Akses ditolak. hanya teacher yang dapat mengakses.' });
         }
         // Lanjutkan ke middleware berikutnya jika role user adalah teacher
         next();

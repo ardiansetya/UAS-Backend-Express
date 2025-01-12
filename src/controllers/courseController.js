@@ -195,7 +195,7 @@ const getContentComment = async (req, res) => {
     const { contentId } = req.params;
 
     try {
-        // const id = req.user.id; // Ambil id dari JWT payload
+       
         const content = await prisma.courseContent.findMany({
             where: { id: parseInt(contentId) },
         });

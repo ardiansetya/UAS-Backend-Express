@@ -5,10 +5,9 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
-// Secret untuk JWT (simpan di .env di lingkungan produksi)
+
 const JWT_SECRET = process.env.JWT_SECRET
 
-// Fungsi Register
 const register = async (req, res) => {
     const { username, email, password, role = "STUDENT" } = req.body;
 
@@ -50,7 +49,8 @@ const register = async (req, res) => {
         res.status(500).json({ message: 'Terjadi kesalahan pada server' });
     }
 };
-// Fungsi Login
+
+
 const login = async (req, res) => {
     const { email, password } = req.body;
 

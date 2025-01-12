@@ -7,7 +7,7 @@ const { createCourseContent, getAllCourseContents, getCourseContentById, updateC
 router.post("/course/:courseId/contents", authenticate, isTeacher, createCourseContent);
 router.get("/course/contents", getAllCourseContents);
 router.get("/course/contents/:id", getCourseContentById);
-router.put("/course/contents/:id", updateCourseContent);
-router.delete("/course/contents/:id", deleteCourseContent);
+router.put("/course/contents/:id", authenticate, isTeacher, updateCourseContent);
+router.delete("/course/contents/:id", authenticate, isTeacher, deleteCourseContent);
 
 module.exports = router;

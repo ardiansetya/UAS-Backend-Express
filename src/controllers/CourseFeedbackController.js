@@ -33,7 +33,6 @@ const addFeedback = async (req, res) => {
 // Show Feedback
 const showFeedback = async (req, res) => {
 
-
     try {
         const feedbacks = await prisma.courseFeedback.findMany();
 

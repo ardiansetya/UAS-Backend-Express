@@ -62,7 +62,7 @@ const showAnnouncements = async (req, res) => {
 // Fungsi untuk mengedit pengumuman
 const editAnnouncement = async (req, res) => {
     const { announcementId } = req.params;
-    const { title, message, announceAt } = req.body;
+    const { title, message } = req.body;
 
     try {
         const id = req.user.id; // Ambil id dari JWT payload
@@ -84,7 +84,7 @@ const editAnnouncement = async (req, res) => {
             data: {
                 title,
                 message,
-                announceAt,
+                
             },
         });
 
