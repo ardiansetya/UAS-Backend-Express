@@ -1,7 +1,10 @@
 const jwt = require('jsonwebtoken');
 const prisma = require('../db'); // Sesuaikan dengan path Prisma Client Anda
+const dotenv = require('dotenv');
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your-jwt-secret';
+dotenv.config();
+
+const JWT_SECRET = process.env.JWT_SECRET ;
 
 // Middleware untuk memeriksa autentikasi (validasi token)
 const authenticate = async (req, res, next) => {
