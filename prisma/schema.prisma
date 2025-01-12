@@ -71,7 +71,7 @@ model CourseMember {
   courseId      Int
   user          User       @relation(fields: [userId], references: [id])
   userId        Int
-  roles         String     @db.VarChar(10) // Misal, 'student', 'assistant'
+  roles         String     @db.VarChar(10) 
   comments      Comment[]
   completions   CompletionTracking[]
 

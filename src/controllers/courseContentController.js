@@ -4,8 +4,16 @@ const prisma = require("../db");
 const createCourseContent = async (req, res) => {
     const { name, description, videoUrl } = req.body;
     const { courseId } = req.params;
+    // Pastikan user sudah terautentikasi
+    const {  role } = req.user;
 
     try {
+
+        // Validasi jika pengguna bukan teacher
+        if (role !== "TEACHER") {
+            return res.status(403).json({ error: "Tidak memiliki izin untuk membuat konten" });
+        }
+
         // Validasi jika kursus ada
         const course = await prisma.course.findUnique({
             where: { id: parseInt(courseId) },
@@ -15,6 +23,7 @@ const createCourseContent = async (req, res) => {
             return res.status(404).json({ error: "Course not found" });
         }
 
+        // Buat konten kursus
         const courseContent = await prisma.courseContent.create({
             data: {
                 name,
@@ -29,12 +38,14 @@ const createCourseContent = async (req, res) => {
             courseContent,
         });
     } catch (error) {
+        console.error(error);
         res.status(500).json({
             error: "Failed to create course content",
             details: error.message,
         });
     }
 };
+
 
 // Get all course contents
 const getAllCourseContents = async (req, res) => {

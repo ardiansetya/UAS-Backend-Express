@@ -10,7 +10,7 @@ const addCompletionTracking = async (req, res) => {
         const courseMember = await prisma.courseMember.findFirst({
             where: {
                 courseId,
-                id,
+                userId: id,
             },
         });
 
@@ -36,13 +36,14 @@ const addCompletionTracking = async (req, res) => {
 const showCompletionTracking = async (req, res) => {
     const { courseId } = req.params;
     const { id } = req.user; // Pastikan id didapatkan dari autentikasi
+    console.log(courseId, id)
 
     try {
         // Mengecek apakah member tersebut sudah mengikuti kursus ini
         const courseMember = await prisma.courseMember.findFirst({
             where: {
                 courseId: parseInt(courseId),
-                id,
+                userId: id,
             },
         });
 
@@ -82,12 +83,19 @@ const deleteCompletionTracking = async (req, res) => {
             },
         });
 
+        const member = await prisma.courseMember.findUnique({
+            where: {
+                id: completion.memberId,
+            },
+        })
+
         if (!completion) {
             return res.status(404).json({ message: 'Completion not found' });
         }
 
+
         // Memastikan hanya member yang membuat completion yang dapat menghapusnya
-        if (completion.member.id !== id) {
+        if (completion.memberId !== member.id) {
             return res.status(403).json({ message: 'You are not allowed to delete this completion' });
         }
 

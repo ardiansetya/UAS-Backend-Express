@@ -4,7 +4,7 @@ const prisma = require('../db');  // Pastikan Prisma sudah diinisialisasi dengan
 const listCourses = async (req, res) => {
     try {
         
-        const { page = 1, limit = 10 } = req.query; // Ambil nilai page dan limit dari query string (default page = 1, limit = 10)
+        const { page = 1, limit = 10 } = req.query; 
         const pageNumber = parseInt(page, 10);
         const limitNumber = parseInt(limit, 10);
 
@@ -63,11 +63,11 @@ const createCourse = async (req, res) => {
     const { name, description, price, site, categoryId, url } = req.body;
 
     try {
-        const {id, role} = req.user; // Ambil id dari JWT payload
-        console.log(req.user.roles)
+        const {id, role} = req.user; 
+        console.log(req.user.role)
 
         // Validasi role
-        if (role !== 'teacher') {
+        if (role !== 'TEACHER') {
             return res.status(403).json({ message: 'Anda tidak memiliki izin untuk membuat course' });
         }
 
@@ -93,9 +93,18 @@ const createCourse = async (req, res) => {
 const updateCourse = async (req, res) => {
     const { courseId } = req.params;
     const { name, description, price, site, categoryId } = req.body;
+    const id = req.user.id; 
+    console.log(id)
 
     try {
-        const id = req.user.id; // Ambil id dari JWT payload
+
+        if (!name || !description || !price || !site) {
+            return res.status(400).json({ message: 'Semua field wajib diisi kecuali categoryId' });
+        }
+
+        if (isNaN(price) || price <= 0) {
+            return res.status(400).json({ message: 'Harga harus berupa angka positif' });
+        }
 
         // Cek apakah user adalah teacher dari course ini
         const course = await prisma.course.findUnique({
@@ -103,7 +112,7 @@ const updateCourse = async (req, res) => {
         });
 
         if (course.teacherId !== id) {
-            return res.status(401).json({ message: 'Anda tidak diijinkan untuk mengupdate kursus ini' });
+            return res.status(403).json({ message: 'Anda tidak diijinkan untuk mengupdate kursus ini' });
         }
 
         const updatedCourse = await prisma.course.update({
@@ -146,7 +155,7 @@ const detailCourse = async (req, res) => {
 const enrollCourse = async (req, res) => {
     const { courseId } = req.params;
     try {
-        const id = req.user.id; // Ambil id dari JWT payload
+        const {id, role} = req.user; // Ambil id dari JWT payload
         const course = await prisma.course.findUnique({
             where: { id: parseInt(courseId) },
         });
@@ -171,7 +180,7 @@ const enrollCourse = async (req, res) => {
             data: {
                 courseId: parseInt(courseId),
                 userId: id,
-                roles: 'STUDENT',  // Menetapkan role sebagai student
+                roles: role,  // Menetapkan role sebagai student
             },
         });
         res.status(201).json(courseMember);
@@ -195,7 +204,13 @@ const getContentComment = async (req, res) => {
             return res.status(404).json({ message: 'Konten tidak ditemukan' });
         }
 
-        res.status(201).json(newComment);
+        const comments = await prisma.comment.findMany({
+            include:{
+                user:true
+            }
+        });
+
+        res.status(200).json(comments);
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Terjadi kesalahan pada server' });
@@ -209,7 +224,7 @@ const createContentComment = async (req, res) => {
     const { comment } = req.body;
 
     try {
-        const id = req.user.id; // Ambil id dari JWT payload
+        const id = req.user.id; 
         const content = await prisma.courseContent.findUnique({
             where: { id: parseInt(contentId) },
         });
@@ -222,7 +237,7 @@ const createContentComment = async (req, res) => {
         const newComment = await prisma.comment.create({
             data: {
                 contentId: content.id,
-                id,
+                userId: id,
                 comment,
             },
         });
@@ -249,7 +264,7 @@ const deleteComment = async (req, res) => {
         }
 
         // Pastikan hanya pemilik komentar yang bisa menghapusnya
-        if (comment.memberId !== userId) {
+        if (comment.userId !== userId) {
             return res.status(403).json({ message: 'Anda tidak memiliki izin untuk menghapus komentar ini' });
         }
 

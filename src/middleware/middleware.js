@@ -24,7 +24,7 @@ const authenticate = async (req, res, next) => {
             return res.status(401).json({ message: 'Akses ditolak. Pengguna tidak ditemukan.' });
         }
 
-        // Simpan user di request untuk digunakan di route selanjutnya
+       
         req.user = user;
         next();
     } catch (error) {
